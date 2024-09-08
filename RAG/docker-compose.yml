@@ -1,0 +1,17 @@
+services:
+  rag_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rag_system:latest
+    volumes:
+      - chroma_data:/app/db
+    ports:
+      - "8000:8000"
+    environment:
+      - CHROMA_DB_PATH=/app/db
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+    driver: local

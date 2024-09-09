@@ -1,7 +1,8 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
+"""тут будут конфиги подключений к БД и тому подобное, лучше делать через pydantic_settings
+внизу оставил пример, которым кейклоак подключал"""
 class BaseAuthConfig(BaseSettings):
 
     model_config = SettingsConfigDict(

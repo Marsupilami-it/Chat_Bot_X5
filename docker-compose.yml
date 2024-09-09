@@ -1,0 +1,28 @@
+services:
+
+  api-service:
+    build: ./api-service
+    container_name: api-service
+    healthcheck:
+      test: curl -f http://localhost:5000/version || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 3
+
+  ml-service:
+    build: ./ml-service
+    container_name: ml-service
+    volumes:
+      - chroma_data:/app/db
+    ports:
+      - "8000:8000"
+    environment:
+      - CHROMA_DB_PATH=/app/db
+    platform: linux/amd64
+    restart: unless-stopped
+
+volumes:
+  #  main-db:
+  #    external: true
+  chroma_data:
+    driver: local

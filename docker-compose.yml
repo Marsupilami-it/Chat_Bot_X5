@@ -5,13 +5,17 @@ services:
       dockerfile: Dockerfile
     image: rag_system:latest
     volumes:
-      - chroma_data:/app/db
+      - chroma_data:/app/data/chroma
+      - model_data:/root/.cache/huggingface
     ports:
       - "8000:8000"
     environment:
-      - CHROMA_DB_PATH=/app/db
+      - CHROMA_DB_PATH=/app/data/chroma
+      - HF_HOME=/root/.cache/huggingface
     restart: unless-stopped
 
 volumes:
   chroma_data:
+    driver: local
+  model_data:
     driver: local

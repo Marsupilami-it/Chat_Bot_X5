@@ -1,5 +1,18 @@
-version: '3'
 services:
+  ollama_service:
+    image: ollama/ollama:latest
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "ollama serve &
+       sleep 10 &&
+       ollama pull gemma2:2b-instruct-q8_0 &&
+       tail -f /dev/null"
+    restart: unless-stopped
   rag_service:
     build:
       context: .
@@ -14,20 +27,7 @@ services:
       - CHROMA_DB_PATH=/app/data/chroma
       - HF_HOME=/root/.cache/huggingface
     restart: unless-stopped
-
-  ollama_service:
-    image: ollama/ollama:latest
-    volumes:
-      - ollama_data:/root/.ollama
-    ports:
-      - "11434:11434"
-    command: ["ollama", "run", "gemma:2b"]
-    restart: unless-stopped
-
 volumes:
-  chroma_data:
-    driver: local
-  model_data:
-    driver: local
   ollama_data:
-    driver: local
+  chroma_data:
+  model_data:

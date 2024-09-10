@@ -1,7 +1,7 @@
 import requests
 import json
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://84.252.136.229:8000"
 
 def call_api(endpoint, data=None):
     url = f"{BASE_URL}{endpoint}"
@@ -17,21 +17,13 @@ def call_api(endpoint, data=None):
         if response:
             print(f"Ответ сервера: {response.text}")
         return None
-print("\n2. Добавление данных из Google Sheets...")
-sheet_data = {
-    "sheet_id": "1qEormopG5VJDg9BfG4-d5kRBTdMPksRcN2sXar9Xepo",
-    "gid": "0"
-}
-result = call_api("/add_from_sheet", sheet_data)
-if result:
-    print(f"Добавлено документов: {result['new_docs_count']}")
-    print(f"Пропущено дубликатов: {result['duplicates_skipped']}")
-    print(f"Всего строк в таблице: {result['total_rows_in_sheet']}")
-    
+
+# 3. Отправка запроса
 query_data = {
-    "queries": ["сотрудник не запланироавал отпуск"],
-    
-    "n_results": 8
+    "queries": ["не корректно проставлен день"],
+               # "мне нужно указать другие дни в расписании работника",
+               # "не корректно проставлен день. мне нужно указать другие дни в расписании работника"],
+    "n_results": 3
 }
 result = call_api("/api/v1/get_answer/", query_data)
 print(result)

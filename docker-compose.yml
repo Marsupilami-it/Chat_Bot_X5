@@ -2,7 +2,7 @@ services:
   rag_service:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.rag
     image: rag_system:latest
     volumes:
       - chroma_data:/app/data/chroma
@@ -14,8 +14,26 @@ services:
       - HF_HOME=/root/.cache/huggingface
     restart: unless-stopped
 
+  ollama_service:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    command: ["ollama", "run", "gemma:2b"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
 volumes:
   chroma_data:
     driver: local
   model_data:
+    driver: local
+  ollama_data:
     driver: local

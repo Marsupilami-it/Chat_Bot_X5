@@ -14,4 +14,18 @@ class MLServiceConfig(BaseSettings):
     ml_service_protocol: str = Field(validation_alias='ML_PROTOCOL', default="http")
 
 
-ml_settings = MLServiceConfig()
+ml_config = MLServiceConfig()
+
+
+class RedisConfig(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file='.env'
+    )
+
+    redis_host: str = Field(validation_alias='REDIS_HOST', default="localhost")
+    redis_port: int = Field(validation_alias='REDIS_PORT', default="6379")
+    redis_db: int = Field(validation_alias='REDIS_DB', default="1")
+    redis_password: str = Field(validation_alias='REDIS_PASSWORD', default="")
+
+
+redis_config = RedisConfig()

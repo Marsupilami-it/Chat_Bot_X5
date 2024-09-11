@@ -9,9 +9,9 @@ from .schemas import (
     Query
 )
 import uvicorn
-from .settings import ml_settings
+from .settings import ml_config
 
-ML_URL = f"{ml_settings.ml_service_protocol}://{ml_settings.ml_service_host}:{ml_settings.ml_service_port}"
+ML_URL = f"{ml_config.ml_service_protocol}://{ml_config.ml_service_host}:{ml_config.ml_service_port}"
 
 app = FastAPI(
     title='API Service',

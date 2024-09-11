@@ -7,7 +7,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копирование кода приложения
-COPY app.py .
+COPY src/ml_service/ .
+#COPY src/ml_service/app.py .
 
 # Создание директории для ChromaDB
 RUN mkdir -p /app/data/chroma

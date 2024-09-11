@@ -1,30 +1,17 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-"""тут будут конфиги подключений к БД и тому подобное, лучше делать через pydantic_settings
-внизу оставил пример, которым кейклоак подключал"""
-class BaseAuthConfig(BaseSettings):
 
+class MLServiceConfig(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=('.env', '.env.prod')
+        env_file='.env'
     )
 
-    server_url: str = Field(validation_alias='server_url', default="http://localhost:8080")
+    ml_service_host: str = Field(validation_alias='ML_HOST', default="ml-service")
 
-    realm: str = Field(validation_alias='realm', default="master")
+    ml_service_port: int = Field(validation_alias='ML_PORT', default="8000")
 
-    client_id: str = Field(validation_alias='client_id', default="user")
-
-    client_secret: str = Field(validation_alias='client_secret', default="")
-
-    authorization_url: str = Field(
-        validation_alias='authorization_url',
-        default="http://localhost:8080/auth/realms/master/protocol/openid-connect/auth"
-    )
-
-    token_url: str = Field(
-        validation_alias='token_url',
-        default="http://localhost:8080/auth/realms/master/protocol/openid-connect/token")
+    ml_service_protocol: str = Field(validation_alias='ML_PROTOCOL', default="http")
 
 
-connection_settings = BaseAuthConfig()
+ml_settings = MLServiceConfig()

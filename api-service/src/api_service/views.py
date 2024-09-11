@@ -1,3 +1,4 @@
+import requests
 from fastapi import (
     FastAPI,
     Depends
@@ -27,6 +28,20 @@ async def get_version(
     return VersionModel(
         version=app.version
     )
+
+
+@app.get(
+    '/test'
+)
+async def test():
+    url = "http://ml-service:8000/add_from_sheet"
+    data = {
+        "sheet_id": "1qEormopG5VJDg9BfG4-d5kRBTdMPksRcN2sXar9Xepo",
+        "gid": "0"
+    }
+
+    response = requests.post(url, json=data)
+    return response.json()
 
 
 if __name__ == '__main__':

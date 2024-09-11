@@ -1,8 +1,18 @@
 services:
+  frontend:
+    build: ./frontend
+    ports:
+      - 8501:8501
+    volumes:
+      - ./frontend:/app
+    restart: always
+    container_name: frontend
 
   api-service:
     build: ./api-service
     container_name: api-service
+    ports:
+      - 8888:5000
     healthcheck:
       test: curl -f http://localhost:5000/version || exit 1
       interval: 5s
@@ -20,6 +30,17 @@ services:
       - CHROMA_DB_PATH=/app/db
     platform: linux/amd64
     restart: unless-stopped
+
+  ollama-service:
+    image: ollama/ollama:latest
+    container_name: ollama-service
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_MODEL=llama2
+    entrypoint: ["ollama", "run", "gemma2:9b"]
+    restart: unless-stopped
+    platform: linux/amd64
 
 volumes:
   #  main-db:

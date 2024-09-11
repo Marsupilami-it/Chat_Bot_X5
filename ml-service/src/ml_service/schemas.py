@@ -1,13 +1,7 @@
 from pydantic import (
-    BaseModel,
-    Field,
+    BaseModel
 )
-from typing import List, Optional
-
-
-class VersionModel(BaseModel):
-    """Версия API"""
-    version: str = Field(default=None, title='Версия', description='Номер версии в виде X.Y[.Z]')
+from typing import (List, Optional)
 
 
 class Query(BaseModel):
@@ -23,5 +17,5 @@ class GoogleSheetInfo(BaseModel):
 
 class BatchAddition(BaseModel):
     documents: List[str]
-    metadata: List[dict]
+    metadatas: List[dict]
     collection: Optional[str] = None

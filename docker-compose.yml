@@ -11,12 +11,6 @@ services:
   api-service:
     build: ./api-service
     container_name: api-service
-#    ports:
-#      - 8888:5000
-    #    depends_on:
-    #      ml-service:
-    #        condition: service_healthy
-    #        restart: true
     healthcheck:
       test: curl -f http://localhost:5000/version || exit 1
       interval: 5s

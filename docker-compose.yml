@@ -1,6 +1,6 @@
 services:
   frontend:
-    build: ./frontend
+    build: ./front
     container_name: frontend
     ports:
       - 8501:8501
@@ -11,6 +11,8 @@ services:
   api-service:
     build: ./api-service
     container_name: api-service
+    ports:
+      - 8000:5000
     healthcheck:
       test: curl -f http://localhost:5000/version || exit 1
       interval: 5s

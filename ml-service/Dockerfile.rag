@@ -12,6 +12,12 @@ COPY app.py .
 # Создание директории для ChromaDB
 RUN mkdir -p /app/data/chroma
 
+# Создание директории для кэша моделей
+RUN mkdir -p /root/.cache/huggingface
+
+# Установка переменной окружения для кэша моделей
+ENV HF_HOME=/root/.cache/huggingface
+
 # Указание порта
 EXPOSE 8000
 

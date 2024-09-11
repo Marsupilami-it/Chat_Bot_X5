@@ -12,9 +12,14 @@ import io
 app = FastAPI()
 os.environ['HF_HUB_DOWNLOAD_TIMEOUT'] = '500'
 
-CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "./chroma_db")
+CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "/app/data/chroma")
+HF_HOME = os.getenv("HF_HOME", "/root/.cache/huggingface")
+
 chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
-emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="WpythonW/RUbert-tiny_custom_test_2")
+emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name="WpythonW/RUbert-tiny_custom_test_2",
+    cache_folder=HF_HOME
+)
 
 # Получаем размерность эмбеддингов
 EMBEDDING_DIMENSION = len(emb_fn("test"))

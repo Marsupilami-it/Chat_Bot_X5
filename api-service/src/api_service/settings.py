@@ -1,30 +1,34 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-"""тут будут конфиги подключений к БД и тому подобное, лучше делать через pydantic_settings
-внизу оставил пример, которым кейклоак подключал"""
-class BaseAuthConfig(BaseSettings):
 
+class MLServiceConfig(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=('.env', '.env.prod')
+        env_file='.env'
     )
 
-    server_url: str = Field(validation_alias='server_url', default="http://localhost:8080")
+    ml_service_host: str = Field(validation_alias='ML_HOST', default="ml-service")
 
-    realm: str = Field(validation_alias='realm', default="master")
+    ml_service_port: int = Field(validation_alias='ML_PORT', default="8000")
 
-    client_id: str = Field(validation_alias='client_id', default="user")
+    ml_service_protocol: str = Field(validation_alias='ML_PROTOCOL', default="http")
 
-    client_secret: str = Field(validation_alias='client_secret', default="")
 
-    authorization_url: str = Field(
-        validation_alias='authorization_url',
-        default="http://localhost:8080/auth/realms/master/protocol/openid-connect/auth"
+ml_config = MLServiceConfig()
+
+
+class RedisConfig(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file='.env'
     )
 
-    token_url: str = Field(
-        validation_alias='token_url',
-        default="http://localhost:8080/auth/realms/master/protocol/openid-connect/token")
+    redis_host: str = Field(validation_alias='REDIS_HOST', default="redis")
+    redis_port: int = Field(validation_alias='REDIS_PORT', default="6379")
+    redis_db: int = Field(validation_alias='REDIS_DB', default="0")
+    redis_password: str = Field(validation_alias='REDIS_PASSWORD', default="")
+
+    redis_user: str = Field(validation_alias='REDIS_USER', default="redis")
+    redis_user_password: str = Field(validation_alias='REDIS_USER_PASSWORD', default="redis")
 
 
-connection_settings = BaseAuthConfig()
+redis_config = RedisConfig()

@@ -7,6 +7,7 @@ BASE_URL = "http://localhost:8888/"
 
 def call_api(endpoint, data=None):
     url = f"{BASE_URL}{endpoint}"
+    response = None
     try:
         if data:
             response = requests.post(url, json=data)

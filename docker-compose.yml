@@ -35,7 +35,6 @@ services:
     restart: unless-stopped
     platform: linux/amd64
 
-
   rag_service:
     build:
       context: ./ml-service

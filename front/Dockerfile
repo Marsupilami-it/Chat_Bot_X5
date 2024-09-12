@@ -13,4 +13,4 @@ COPY . .
 EXPOSE 8501
 
 # Команда для запуска Streamlit на выбранном порту
-CMD ["streamlit", "run", "app.py", "--server.port=8500", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "front/app.py", "--server.port=8500", "--server.address=0.0.0.0"]

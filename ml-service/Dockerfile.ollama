@@ -1,0 +1,11 @@
+# Используем официальный образ Ollama как базовый
+FROM ollama/ollama:latest
+
+# Устанавливаем переменную окружения для модели
+ENV OLLAMA_MODEL=llama2
+
+# Открываем порт для API Ollama
+EXPOSE 11434
+
+# Запускаем Ollama с указанной моделью
+CMD ["ollama", "run", "gemma2:9b"]

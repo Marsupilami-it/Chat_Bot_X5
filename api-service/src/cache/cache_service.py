@@ -1,16 +1,19 @@
 from redis import Redis
 from typing import Optional
 
-from models import ChatRequest
+# from models import ChatRequest
 import logging
-
+from api_service.settings import redis_config as conf
 
 logger = logging.getLogger(__name__)
 
 
 class CacheServer:
-    def __init__(self, host='localhost', port=6379, db=0):
-        self.client = Redis(host=host, port=port, db=db)
+    def __init__(self):
+        self.host = conf.redis_host
+        self.port = conf.redis_port
+        self.db = conf.redis_db
+        self.client = Redis(host=self.host, port=self.port, db=self.db)
 
     def get(self, key: str) -> Optional[bytes]:
         """Возвращает значение по ключу, или None, если ключ не найден."""
@@ -52,21 +55,21 @@ class CacheServer:
         """Отслеживает количество запросов."""
         self.incr("request_count")
 
-    def save_request(self, request: ChatRequest, expire: Optional[int] = None):
-        """Сохраняет запрос в Redis."""
-        try:
-            self.client.set(request.user_id, request.json(), ex=expire)
-        except Exception as e:
-            logger.error(f"Ошибка сохранения запроса в Redis: {e}")
-
-    def get_request(self, user_id: str) -> Optional[ChatRequest]:
-        """Получает запрос из Redis."""
-        try:
-            data = self.client.get(user_id)
-            if data:
-                return ChatRequest.parse_raw(data)
-            else:
-                return None
-        except Exception as e:
-            logger.error(f"Ошибка получения запроса из Redis: {e}")
-            return None
+    # def save_request(self, request: ChatRequest, expire: Optional[int] = None):
+    #     """Сохраняет запрос в Redis."""
+    #     try:
+    #         self.client.set(request.user_id, request.json(), ex=expire)
+    #     except Exception as e:
+    #         logger.error(f"Ошибка сохранения запроса в Redis: {e}")
+    #
+    # def get_request(self, user_id: str) -> Optional[ChatRequest]:
+    #     """Получает запрос из Redis."""
+    #     try:
+    #         data = self.client.get(user_id)
+    #         if data:
+    #             return ChatRequest.parse_raw(data)
+    #         else:
+    #             return None
+    #     except Exception as e:
+    #         logger.error(f"Ошибка получения запроса из Redis: {e}")
+    #         return None

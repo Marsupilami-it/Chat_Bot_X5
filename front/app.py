@@ -1,14 +1,8 @@
 import streamlit as st
-from neo4j import GraphDatabase
 import json
 import requests
 
-# Initialize Neo4j driver
-#uri = "bolt://localhost:7687"  # URL вашего Neo4j сервера
-#driver = GraphDatabase.driver(uri, auth=("username", "password"))
-
-
-BASE_URL = "http://84.252.136.229:8000"
+BASE_URL = "http://localhost:8888/"
 
 
 def call_api(endpoint, data=None):
@@ -55,20 +49,30 @@ def extract_documents(json_response):
     """
     Извлекает массив документов из JSON-ответа.
 
-    :param json_response: JSON-ответ в виде строки
-    :return: Список документов
+    :param json_response: JSON-ответ в виде строки или словаря
+    :return: Список документов или сообщение об отсутствии данных
     """
     # Проверяем, является ли json_response словарем
     if isinstance(json_response, dict):
         response_dict = json_response
     else:
-        # Если это строка JSON, преобразуем её в словарь
-        response_dict = json.loads(json_response)
+        try:
+            # Если это строка JSON, преобразуем её в словарь
+            response_dict = json.loads(json_response)
+        except json.JSONDecodeError as e:
+            return f"Ошибка декодирования JSON: {e}"
 
-    # Извлекаем массив документов
-    documents = response_dict['answer']['documents'][0][0]
+    # Проверяем наличие ключа 'documents' и его содержимого
+    if 'answer' in response_dict and 'documents' in response_dict['answer']:
+        documents = response_dict['answer']['documents']
 
-    return documents
+        # Проверяем, что документы не пустые
+        if documents and len(documents[0]) > 0:
+            return documents[0]
+        else:
+            return "Документы отсутствуют"
+    else:
+        return "Ключ 'documents' не найден в ответе"
 
 # Page Config
 st.set_page_config("Ebert", page_icon=":movie_camera:")
@@ -98,7 +102,7 @@ def handle_submit(message):
             "n_results": 3
         }
         result = call_api("/api/v1/get_answer/", query_data)
-
+        print(result)
         documents = extract_documents(result)
         write_message('assistant', documents)
 

@@ -1,98 +1,28 @@
-services:
-  frontend:
-    build: ./front
-    container_name: frontend
-    ports:
-      - 8501:8501
-    volumes:
-      - ./frontend:/app
-    restart: always
+version: '3.8'
 
-  api-service:
-    build: ./api-service
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     container_name: api-service
     ports:
-      - 8888:5000
-    healthcheck:
-      test: curl -f http://localhost:5000/version || exit 1
-      interval: 5s
-      timeout: 2s
-      retries: 3
+      - "8003:8003"
+    networks:
+      - app-network
 
-  ollama_service:
-    image: ollama/ollama:latest
-    container_name: ollama
-    volumes:
-      - ollama_data:/root/.ollama
-    ports:
-      - "11434:11434"
-    entrypoint: [ "/bin/sh", "-c" ]
-    command: >
-      "ollama serve &
-       sleep 10 &&
-       ollama pull gemma2:2b-instruct-q8_0 &&
-       tail -f /dev/null"
-    restart: unless-stopped
-    platform: linux/amd64
-
-
-  rag_service:
+  ui:
     build:
-      context: ./ml-service
-      dockerfile: Dockerfile
-    image: rag_system:latest
-    container_name: ml-service
-    volumes:
-      - chroma_data:/app/data/chroma
-      - model_data:/root/.cache/huggingface
+      context: .
+      dockerfile: Dockerfile.ui
+    container_name: ui-service
     ports:
-      - "8000:8000"
-    environment:
-      - CHROMA_DB_PATH=/app/data/chroma
-      - HF_HOME=/root/.cache/huggingface
-    restart: unless-stopped
-    platform: linux/amd64
+      - "8501:8501"
+    depends_on:
+      - api
+    networks:
+      - app-network
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - REDIS_USER=${REDIS_USER}
-      - REDIS_USER_PASSWORD=${REDIS_USER_PASSWORD}
-    ports:
-      - "6380:6379"
-    volumes:
-      - ./redisdata:/data
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
-    command: >
-      sh -c '
-        mkdir -p /usr/local/etc/redis &&
-        echo "bind 0.0.0.0" > /usr/local/etc/redis/redis.conf &&
-        echo "requirepass $REDIS_PASSWORD" >> /usr/local/etc/redis/redis.conf &&
-        echo "appendonly yes" >> /usr/local/etc/redis/redis.conf &&
-        echo "appendfsync everysec" >> /usr/local/etc/redis/redis.conf &&
-        echo "user default on nopass ~* +@all" > /usr/local/etc/redis/users.acl &&
-        echo "user $REDIS_USER on >$REDIS_USER_PASSWORD ~* +@all" >> /usr/local/etc/redis/users.acl &&
-        redis-server /usr/local/etc/redis/redis.conf --aclfile /usr/local/etc/redis/users.acl
-      '
-    healthcheck:
-      test: [ "CMD", "redis-cli", "-a", "$REDIS_PASSWORD", "ping" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    restart: unless-stopped
-    tty: true
-    stdin_open: true
-
-volumes:
-  chroma_data:
-  ollama_data:
-  model_data:
+networks:
+  app-network:
+    driver: bridge

@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.11.7-slim
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Копируем все файлы в рабочую директорию контейнера
 COPY . .
 
-EXPOSE 8500
+EXPOSE 8501
 
 # Команда для запуска Streamlit на выбранном порту
-CMD ["streamlit", "run", "app.py", "--server.port=8500", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "front/app.py", "--server.port=8500", "--server.address=0.0.0.0"]

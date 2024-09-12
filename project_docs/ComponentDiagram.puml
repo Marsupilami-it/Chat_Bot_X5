@@ -1,0 +1,28 @@
+@startuml
+node Frontend {
+}
+node Api-service {
+  component "api-service" as API
+  component CacheService
+  database cache
+
+}
+node ML-service {
+  component RAG
+  component Ollama
+  database ChromaDB
+}
+
+Frontend --> API
+Frontend <-- API
+API --> RAG
+API <-- RAG
+API --> CacheService
+API <-- CacheService
+cache --> CacheService
+cache <-- CacheService
+RAG --> Ollama
+RAG <-- Ollama
+RAG --> ChromaDB
+RAG <-- ChromaDB
+@enduml

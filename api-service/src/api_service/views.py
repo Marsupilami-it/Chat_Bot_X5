@@ -1,6 +1,6 @@
 import requests
 from fastapi import (
-    FastAPI, APIRouter,
+    FastAPI,
 )
 from .schemas import (
     GoogleSheetInfo,
@@ -53,7 +53,8 @@ async def get_answer(query: Query):
     answer = response.json()
 
     # Сохраняем ответ в кэш
-    cache.set(cache_key, f"{answer}", expire=3600)  #  час
+    # FIXME ответ лучше сохранять не строкой
+    cache.set(cache_key, f"{answer}", expire=3600)  # час
 
     return answer
 

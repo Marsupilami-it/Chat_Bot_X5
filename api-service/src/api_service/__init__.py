@@ -1,6 +1,7 @@
 __all__ = [
     'app',
     'models',
+    'settings',
 
 ]
 

@@ -2,15 +2,16 @@ from os import getenv
 from typing import Optional
 from redis import Redis
 import logging
+from api_service.settings import redis_config as conf
 
 logger = logging.getLogger(__name__)
 
 
 class RedisClient:
     def __init__(self):
-        self.host = getenv("REDIS_HOST")
-        self.port = int(getenv("REDIS_PORT"))
-        self.db = int(getenv("REDIS_DB", 0))
+        self.host = conf.redis_host
+        self.port = conf.redis_port
+        self.db = conf.redis_db
         self.client = Redis(host=self.host, port=self.port, db=self.db)
 
     def get(self, key: str) -> Optional[bytes]:

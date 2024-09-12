@@ -11,8 +11,11 @@ from .schemas import (
 import uvicorn
 import json
 from .settings import ml_config
+from cache.cache_service import CacheServer
 
 ML_URL = f"{ml_config.ml_service_protocol}://{ml_config.ml_service_host}:{ml_config.ml_service_port}"
+
+cache = CacheServer()
 
 app = FastAPI(
     title='API Service',
@@ -20,11 +23,6 @@ app = FastAPI(
     description="API для взаимодействия с чат-ботом",
     root_path="/api/v1"
 )
-
-admin = APIRouter(
-    prefix="/admin",
-)
-app.include_router(admin)
 
 
 @app.get(
@@ -45,9 +43,19 @@ async def get_version() -> VersionModel:
     description='Возвращает ответ от модели на заданный вопрос'
 )
 async def get_answer(query: Query):
+    cache_key = " ".join(str(q) for q in query.queries)
+    cached_response = cache.get(cache_key)
+    if cached_response:
+        return cached_response
+
     url = f"{ML_URL}/get_answer/"
     response = requests.post(url, json=query.dict())
-    return response.json()
+    answer = response.json()
+
+    # Сохраняем ответ в кэш
+    cache.set(cache_key, f"{answer}", expire=3600)  #  час
+
+    return answer
 
 
 @app.post(
@@ -106,7 +114,7 @@ async def reset_database():
     '/test_ollama/',
     description=''
 )
-async def reset_database(content: str):
+async def test_ollama(content: str):
     url = "http://ollama:11434/api/chat"
     payload = {
         "model": "gemma2:2b-instruct-q8_0",

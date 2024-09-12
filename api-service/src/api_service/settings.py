@@ -22,10 +22,13 @@ class RedisConfig(BaseSettings):
         env_file='.env'
     )
 
-    redis_host: str = Field(validation_alias='REDIS_HOST', default="localhost")
+    redis_host: str = Field(validation_alias='REDIS_HOST', default="redis")
     redis_port: int = Field(validation_alias='REDIS_PORT', default="6379")
-    redis_db: int = Field(validation_alias='REDIS_DB', default="1")
+    redis_db: int = Field(validation_alias='REDIS_DB', default="0")
     redis_password: str = Field(validation_alias='REDIS_PASSWORD', default="")
+
+    redis_user: str = Field(validation_alias='REDIS_USER', default="redis")
+    redis_user_password: str = Field(validation_alias='REDIS_USER_PASSWORD', default="redis")
 
 
 redis_config = RedisConfig()

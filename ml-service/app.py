@@ -18,8 +18,8 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 os.environ['HF_HUB_DOWNLOAD_TIMEOUT'] = '500'
 
-#CHROMA_DB_PATH = './'
-CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "/app/data/chroma")
+CHROMA_DB_PATH = './'
+#CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "/app/data/chroma")
 HF_HOME = os.getenv("HF_HOME", "/root/.cache/huggingface")
 
 logger.info(f"Initializing Chroma client with path: {CHROMA_DB_PATH}")

@@ -3,7 +3,7 @@ version: '3.8'
 services:
   api:
     build:
-      context: .
+      context: ./api
       dockerfile: Dockerfile.api
     container_name: api-service
     ports:
@@ -13,7 +13,7 @@ services:
 
   ui:
     build:
-      context: .
+      context: ./гш
       dockerfile: Dockerfile.ui
     container_name: ui-service
     ports:

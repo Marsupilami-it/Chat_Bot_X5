@@ -2,9 +2,8 @@ import streamlit as st
 import requests
 
 
+# api-service ссылка на докер контейнер
 BASE_URL = "http://api:8003/"
-
-# api-service
 
 def write_message(role, content, save=True):
     """
@@ -18,7 +17,7 @@ def write_message(role, content, save=True):
         st.markdown(f"**Чат-бот:** {content}")
 
 
-st.set_page_config("X5 Group", page_icon=":ai:")
+st.set_page_config("X5 Group", page_icon="💬")
 
 if "messages" not in st.session_state:
     st.session_state.messages = [

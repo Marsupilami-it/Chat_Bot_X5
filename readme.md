@@ -40,7 +40,7 @@ http://localhost:8501
 Запустив Docker контейнеры можно обращаться к чат боту двумя способами:
 1) через ui интефрейс. Для этого зайти на сайт http://localhost:8501/ либо 51.250.79.164 (хост сервер)
 2) прокидывать POST запросы. Для этого откройте postman или любой другой источник в поле адрес укажите
-POST http://localhost:8503/api/v1/get_answer/
+POST http://localhost:8003/api/v1/get_answer/
 Тело сообщения может быть в формате истории общения пользователя с чат-ботом. Пример body ниже
 ``` json 
 {
@@ -71,18 +71,22 @@ POST http://localhost:8503/api/v1/get_answer/
 ```
 Вы получите ответ в такой структуре JSON. Берете message и в нем первое значение content
 ```
-{'model': 'gemma2:2b-instruct-q8_0',
- 'created_at': '2024-09-12T16:14:14.262655667Z',
- 'message': {'role': 'assistant',
-  'content': 'Создайте, пожалуйста, обращение в ИТ поддержку на портале support \n'},
- 'done_reason': 'stop',
- 'done': True,
- 'total_duration': 593868968,
- 'load_duration': 43207425,
- 'prompt_eval_count': 378,
- 'prompt_eval_duration': 209776000,
- 'eval_count': 18,
- 'eval_duration': 338986000}
+{
+    "model": "gemma2:9b",
+    "created_at": "2024-09-13T07:08:19.133418679Z",
+    "message": {
+        "role": "assistant",
+        "content": "Ознакомиться с графиком отпусков и воспользоваться доступным для планирования лимитом Вы можете разделе «Отпуска». Обращаем внимание, что в Личном кабинете отображаются доступные лимиты за вычетом уже запланированных дней. \n\n\n"
+    },
+    "done_reason": "stop",
+    "done": true,
+    "total_duration": 25113630279,
+    "load_duration": 16617390458,
+    "prompt_eval_count": 1392,
+    "prompt_eval_duration": 2011579000,
+    "eval_count": 58,
+    "eval_duration": 3905974000
+}
 ```
 Требования из кейса к API
 ![Описание изображения](docs/api-instruction.jpg)

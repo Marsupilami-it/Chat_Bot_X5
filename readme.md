@@ -3,7 +3,7 @@
 1) Клонируйте репозиторий проекта:
 
 ``` bash
-git clone -b api https://github.com/Marsupilami-it/Chat_Bot_X5.git
+git clone https://github.com/Marsupilami-it/Chat_Bot_X5.git
 ```
 
 2. Перейдите в директорию проекта:

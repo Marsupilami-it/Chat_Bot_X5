@@ -1,32 +1,38 @@
+version: '2.4'
 services:
   ollama_service:
     image: ollama/ollama:latest
     container_name: ollama
     volumes:
-      - ollama_data:/root/.ollama
+      - ./ollama_data:/root/.ollama
     ports:
       - "11434:11434"
     entrypoint: ["/bin/sh", "-c"]
     command: >
       "ollama serve &
-       sleep 10 &&
-       ollama pull gemma2:2b-instruct-q8_0 &&
-       tail -f /dev/null"
+      sleep 10 &&
+      ollama pull gemma2:2b-instruct-q8_0 &&
+      tail -f /dev/null"
     restart: unless-stopped
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
   rag_service:
     build:
-      context: ../ml-service
-      dockerfile: ml-service/DockerfileOLD
+      context: .
+      dockerfile: Dockerfile.rag
     image: rag_system:latest
     volumes:
-      - chroma_data:/app/data/chroma
-      - model_data:/root/.cache/huggingface
+      - ./chroma_data:/app/data/chroma
+      - ./model_data:/root/.cache/huggingface
     ports:
       - "8000:8000"
     environment:
       - CHROMA_DB_PATH=/app/data/chroma
       - HF_HOME=/root/.cache/huggingface
+      - NVIDIA_VISIBLE_DEVICES=all
     restart: unless-stopped
+    runtime: nvidia
 volumes:
   ollama_data:
   chroma_data:

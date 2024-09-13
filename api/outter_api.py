@@ -12,6 +12,7 @@ logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s]: %(message)s")
 
 app = FastAPI()
+# ip с задеплоенной собственной системой rag + ollama
 ip = '62.68.146.67'
 
 # Модель для описания структуры данных запроса

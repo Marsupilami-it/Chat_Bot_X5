@@ -13,7 +13,7 @@ services:
 
   ui:
     build:
-      context: ./гш
+      context: ./ui
       dockerfile: Dockerfile.ui
     container_name: ui-service
     ports:

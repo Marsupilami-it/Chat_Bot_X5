@@ -3,8 +3,8 @@ version: '3.8'
 services:
   api:
     build:
-      context: ./api
-      dockerfile: Dockerfile.api
+      context: .
+      dockerfile: api/Dockerfile.api
     container_name: api-service
     ports:
       - "8003:8003"
@@ -13,8 +13,8 @@ services:
 
   ui:
     build:
-      context: ./ui
-      dockerfile: Dockerfile.ui
+      context: .
+      dockerfile: ui/Dockerfile.ui
     container_name: ui-service
     ports:
       - "8501:8501"

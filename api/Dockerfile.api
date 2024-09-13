@@ -7,7 +7,7 @@ COPY requirements.txt /app/
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY outter_api.py /app/
+COPY api/outter_api.py /app/
 
 EXPOSE 8003
 

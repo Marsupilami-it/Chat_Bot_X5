@@ -1,28 +1,14 @@
-version: '3.8'
-
 services:
-  api:
+  chatbot:
     build:
       context: .
-      dockerfile: api/Dockerfile.api
-    container_name: api-service
+      dockerfile: Dockerfile
     ports:
-      - "8003:8003"
-    networks:
-      - app-network
-
-  ui:
-    build:
-      context: .
-      dockerfile: ui/Dockerfile.ui
-    container_name: ui-service
-    ports:
-      - "8501:8501"
-    depends_on:
-      - api
-    networks:
-      - app-network
+      - "9003:9003"  # Порт для API
+      - "9501:8501"  # Порт для UI
+    environment:
+      - LLM_IP=62.68.146.67  # IP адрес LLM сервиса
 
 networks:
-  app-network:
+  default:
     driver: bridge

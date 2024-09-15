@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+requests
+pydantic
+streamlit
+streamlit_extras
+requests

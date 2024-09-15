@@ -1,0 +1,14 @@
+services:
+  chatbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9003:9003"  # Порт для API
+      - "9501:8501"  # Порт для UI
+    environment:
+      - LLM_IP=62.68.146.67  # IP адрес LLM сервиса
+
+networks:
+  default:
+    driver: bridge
